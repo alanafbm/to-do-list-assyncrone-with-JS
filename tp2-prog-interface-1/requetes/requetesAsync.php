@@ -10,6 +10,7 @@
     switch ($action) {
         
         case 'getAllTaches':
+            
             return getAllTaches();
 
             break;
@@ -33,13 +34,12 @@
             break;
 
         case 'deleteTache':
-
+            
             if (isset($_POST['id'])) {
 
                 $id = htmlspecialchars($_POST['id']);
                 
                 deleteTache($id);
-            
             } else {
                 echo 'Erreur query string';
             }
