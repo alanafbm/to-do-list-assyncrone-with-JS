@@ -1,8 +1,9 @@
-class SortTasks extends App {
+import Task from "./Task.js";
+export default class SortTasks extends Task {
     constructor(el) {
         super();
         this._el = el;
-        this._elBtnsSort = this._el.querySelectorAll('[data-js-sort]');
+        // this._elBtnsSort = this._el.querySelectorAll('[data-js-sort]');
         this._elToDoList = document.querySelector('[data-js-tasks]');
 
         this.init();
@@ -13,8 +14,9 @@ class SortTasks extends App {
      * Initialise les comportements
      */
     init() {
-        for (let i = 0, l = this._elBtnsSort.length; i < l; i++) {
-            this._elBtnsSort[i].addEventListener('click', function(e) {
+        const _elBtnsSort = this._el.querySelectorAll('[data-js-sort]');
+        for (let i = 0, l = _elBtnsSort.length; i < l; i++) {
+            _elBtnsSort[i].addEventListener('click', function(e) {
                 let ordre = e.target.dataset.jsSort;
                 this.sort(ordre);
             }.bind(this));

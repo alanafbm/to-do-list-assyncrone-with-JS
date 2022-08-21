@@ -1,4 +1,4 @@
-class Detail {
+export default class Detail {
     constructor(el) {
         this._el = el;
         this._elChevron = this._el.querySelector('[data-js-chevron]');

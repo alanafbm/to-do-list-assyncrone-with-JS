@@ -1,11 +1,11 @@
-class Task extends App {
+// import App from "./App.js";
+export default class Task {
     constructor(el) {
-        super();
         this._el = el;
-        this._index = this._el.dataset.jsTask;
+        this._el = document.querySelector('[data-js-tasks]');
+        this._index = "";
         this._elBtnShowDetail = this._el.querySelector('[data-js-show-detail]');
         this._elBtnDelete = this._el.querySelector('[data-js-delete]');
-        
         this._elToDoList = this._el.closest('[data-js-tasks]');
         this._elTaskDetail = document.querySelector('[data-js-task-detail]');
         this.toDoList = [];
@@ -17,7 +17,7 @@ class Task extends App {
      * Initialise les comportements
      */
     init() {
-        console.log(this._elBtnDelete);
+        
         this._elBtnShowDetail.addEventListener('click', this.showDetail.bind(this));
         this._elBtnDelete.addEventListener('click', this.delete.bind(this));
     }
@@ -47,13 +47,15 @@ class Task extends App {
      * Supprime la tâche du tableau toDoList et appelle la méthode pour injecter les tâches mises à jour
      */
     delete() {
-        // toDoList.splice(this._index, 1);
-        // // Réinjecte les tâches purgées de la tâche supprimée
-        // this._elToDoList.innerHTML = '';
-        // for (let i = 0, l = toDoList.length; i < l; i++) {
-        //     this.createTask(i);
-        // }
+        toDoList.splice(this._index, 1);
+        // Réinjecte les tâches purgées de la tâche supprimée
+        this._elToDoList.innerHTML = '';
+        for (let i = 0, l = toDoList.length; i < l; i++) {
+            this.createTask(i);
+        }
 
         console.log('delete');
     }
+
+    
 }

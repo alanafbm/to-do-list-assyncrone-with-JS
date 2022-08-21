@@ -1,13 +1,11 @@
-class Form extends App {
+import Task from "./Task.js";
+export default class Form {
     constructor(el) {
-        super();
         this._el = el;
-        this._elInputTask = this._el.task;
-        this._elInputDescription = this._el.description;
-        this._elImportance = this._el.importance;
+        this._elInputTask = '';
+        this._elInputDescription = '';
+        this._elImportance =  '';
         this._elInputImportance = this._el.querySelectorAll('input[name="importance"]');
-        this._elBouton = this._el.querySelector('[data-js-btn]'); 
-        
         this._elToDoList = document.querySelector('[data-js-tasks]');
 
         this.init();
@@ -18,25 +16,60 @@ class Form extends App {
      * Initialise les comportements
      */
     init() {
-        this._elBouton.addEventListener('click', function(e) {
+        const _elBouton = document.querySelector('[data-js-btn]');
+        _elBouton.addEventListener('click', function(e) {
             e.preventDefault();
-
             /* Si valide */
             let estValide = this.validForm();
             if (estValide) {
-                // this.addTask();
                 this.afficheTache();
-                this._el.reset();
+              
+                
             }
         }.bind(this));
     }
 
 
-    afficheTache(){
-        let encodedTask = encodeURIComponent(this._elInputTask.value),
-            encodedDescription = encodeURIComponent(this._elInputDescription.value),
-            encodedImportance = encodeURIComponent(this._elImportance.value)
+    /**
+     * Validation du formualaire
+     * @returns 
+     */
+    validForm() {
+        this._elInputTask = this._el.task.value;
+        this._elInputDescription = this._el.description.value;
+        this._elImportance = this._el.importance.value;
 
+        let estValide = true;
+        /* Input 'Nouvelle tâche' */
+        if (this._el.task.value === '') {
+            this._el.task.parentNode.classList.add('error');
+            estValide = false;
+        } else {
+            if (this._el.task.parentNode.classList.contains('error')) this._el.task.parentNode.classList.remove('error');
+        }
+
+        /* Inputs Radio 'Importance' */
+        let elCheckedImportance = this._el.querySelector('input[name="importance"]:checked');
+
+        if (elCheckedImportance) {
+            
+            if (this._elInputImportance[0].parentNode.classList.contains('error')) this._elInputImportance[0].parentNode.classList.remove('error');
+        } else {
+            this._elInputImportance[0].parentNode.classList.add('error');
+            estValide = false;
+        }
+
+        return estValide;
+    }
+
+
+    afficheTache(){
+        this._elInputTask = this._el.task.value;
+        this._elInputDescription = this._el.description.value;
+        this._elImportance = this._el.importance.value;
+        let encodedTask = encodeURIComponent(this._elInputTask),
+            encodedDescription = encodeURIComponent(this._elInputDescription),
+            encodedImportance = encodeURIComponent(this._elImportance)
         let myInit = { 
             method: 'post',
             headers: {
@@ -56,7 +89,7 @@ class Form extends App {
                     tache = encodedTask,
                     importance = encodedImportance;
                 this.createTask(id, tache, importance);   
-               
+                this._el.reset();
             }.bind(this))
             .catch(function(error) {
                 console.log(`Il y a eu un problème avec l'opération fetch: ${error.message}`);
@@ -64,48 +97,44 @@ class Form extends App {
     };
 
     /**
-     * Validation du formualaire
-     * @returns 
+     * Construit, injecte et lance les comportements de chaque nouvelle tâche
+     * @param {int} index 
      */
-    validForm() {
+     createTask(id, tache, importance) {
 
-        let estValide = true;
+        let newTaskDom = `
+                        <div data-js-task=${id}>
+                            <p>
+                                <span>
+                                    <small>Tâche : </small>${tache}
+                                </span>
+                                -
+                                <span>
+                                    <small>Importance : </small>${importance}
+                                </span>
+                                <button data-js-show-detail>Afficher le détail</button>
+                                <button data-js-delete>Supprimer</button>
+                            </p>
+                        </div> `;
 
-        /* Input 'Nouvelle tâche' */
-        if (this._elInputTask.value == '') {
-            this._elInputTask.parentNode.classList.add('error');
-            estValide = false;
-        } else {
-            if (this._elInputTask.parentNode.classList.contains('error')) this._elInputTask.parentNode.classList.remove('error');
-        }
+    this._elToDoList.insertAdjacentHTML('beforeend', newTaskDom);
 
-        /* Inputs Radio 'Importance' */
-        let elCheckedImportance = this._el.querySelector('input[name="importance"]:checked');
+    new Task(this._elToDoList.lastElementChild);        
+    } 
 
-        if (elCheckedImportance) {
-            if (this._elInputImportance[0].parentNode.classList.contains('error')) this._elInputImportance[0].parentNode.classList.remove('error');
-        } else {
-            this._elInputImportance[0].parentNode.classList.add('error');
-            estValide = false;
-        }
+    // /**
+    //  * Ajoute la tâche au tableau toDoList et appelle la méthode pour injecter la nouvelle tâche
+    //  */
+    // addTask() {
+    //     // let task = {
+    //        const tache = this._elInputTask.value,
+    //              description = this._elInputDescription.value,
+    //              importance = this._el.querySelector('input[name="importance"]:checked').value
+    //     // }
 
-        return estValide;
-    }
+    //     // toDoList.push(task);
 
-
-    /**
-     * Ajoute la tâche au tableau toDoList et appelle la méthode pour injecter la nouvelle tâche
-     */
-    addTask() {
-        // let task = {
-           const tache = this._elInputTask.value,
-                 description = this._elInputDescription.value,
-                 importance = this._el.querySelector('input[name="importance"]:checked').value
-        // }
-
-        // toDoList.push(task);
-
-        // Injecte la tâche
-        // this.createTask(task.tache, task.description, task.importance);
-    }
+    //     // Injecte la tâche
+    //     // this.createTask(task.tache, task.description, task.importance);
+    // }
 }

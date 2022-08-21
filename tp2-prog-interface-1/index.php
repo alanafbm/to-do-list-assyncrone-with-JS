@@ -5,24 +5,24 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>TP2 | Simon C-B</title>
+	<title>TP2 | Alana Moraes</title>
 	<meta name="description" content="TP2 du cours 582-21F-MA Programmation d'interface Web 1">
 
 	<!-- styles -->
 	<link rel="stylesheet" type="text/css" href="./assets/styles/styles.css">
 
 	<!-- scripts -->
-	<script src="./assets/scripts/App.js"></script>
-	<script src="./assets/scripts/Detail.js"></script>
-	<script src="./assets/scripts/Task.js"></script>
-	<script src="./assets/scripts/Form.js"></script>
-	<script src="./assets/scripts/SortTasks.js"></script>
-	<script src="./assets/scripts/main.js" defer></script>
+	<!-- <script type="module" src="./assets/scripts/App.js"></script>
+	<script type="module" src="./assets/scripts/Detail.js"></script>
+	<script type="module" src="./assets/scripts/Task.js"></script>
+	<script type="module" src="./assets/scripts/Form.js"></script>
+	<script type="module" src="./assets/scripts/SortTasks.js"></script> -->
+	<script type="module" src="./assets/scripts/main.js" defer></script>
 </head>
 
 <body>
 	<header>
-		<h1>TP2</h1>
+		<h1>TP2 - Alana Moraes</h1>
         <p>Un gestionnaire de tâches (to-do-list) en POO.</p>
         <hr>
 	</header>
@@ -68,7 +68,7 @@
 
 					// Récupération des résultats sous forme de tableau associatif
 					while ($tache = mysqli_fetch_assoc($taches)) { 
-						echo '<div data-js-task=${index}>
+						echo '<div data-js-task= ' . $tache['id'] . '>
                             <p>
                                 <span>
                                     <small>Tâche : </small>' . $tache['tache'] . '
