@@ -40,22 +40,42 @@ export default class Task {
                     </div>`;
 
         this._elTaskDetail.innerHTML = elDetailDom;
-    }
 
 
-    /**
-     * Supprime la tâche du tableau toDoList et appelle la méthode pour injecter les tâches mises à jour
-     */
-    delete() {
-        // toDoList.splice(this._index, 1);
-        // // Réinjecte les tâches purgées de la tâche supprimée
-        // this._elToDoList.innerHTML = '';
-        // for (let i = 0, l = toDoList.length; i < l; i++) {
-        //     this.createTask(i);
-        // }
+        
+        let encodedId = encodeURIComponent(id);
 
-        console.log('delete');
-    }
+        fetch(`requetes/requetesAsync.php?id=${encodedId}`)
+            .then (function(response) {
+                if (response.ok) return response.json();
+                else throw new Error('La réponse n\'est pas OK');
+            })
+            .then (function(data) {
 
+                let elDetail = document.querySelector('[data-js-task-detail]');
+
+                if (elDetail) {
+                    elDetail.classList.add('hidden');
+
+                    /**
+                     * Écoute l'événement 'transitionend' avant de lancer l'injection du nouvel élément
+                     */
+                    elPlayersList.addEventListener('transitionend', function(e) {
+                        //console.log('Transition ended');
+
+                        // https://stackoverflow.com/questions/18689031/transitionend-event-fires-twice
+                        if (e.propertyName == 'opacity') { 
+                            elPlayersList.remove();
+                            this.showTeamPlayers(data);
+                        }
+                    }.bind(this));
+                } else {
+                    this.showTeamPlayers(data);
+                }
+            }.bind(this))
+            .catch (function(error) {
+                console.log(`Il y a eu un problème avec l'opération fetch: ${error.message}`);
+            });
     
+    }    
 }

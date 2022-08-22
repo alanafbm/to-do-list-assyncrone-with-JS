@@ -3,7 +3,6 @@ import SortTasks from './SortTasks.js'
 import Detail from './Detail.js'
 
 (function() {
-
     let elForms = document.querySelectorAll('[data-js-form]'),
         elSortTasks = document.querySelectorAll('[data-js-sort-tasks]'),
         elDetails = document.querySelectorAll('[data-js-section-detail]');

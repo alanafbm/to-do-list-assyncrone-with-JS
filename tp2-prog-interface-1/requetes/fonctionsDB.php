@@ -55,4 +55,12 @@
 	function deleteTache($id) {
 		return executeRequete("DELETE FROM taches WHERE id = '$id'");
 	}
+
+	function showDetail($id) {
+		return executeRequete("SELECT tache, description, importance FROM taches WHERE id = $id");
+	}
+
+	function trierPar($trierpar) {
+		return executeRequete("SELECT * FROM taches ORDER BY importance ASC");
+	}
 ?>

@@ -7,6 +7,21 @@
         $action = $_POST['action'];
     }
 
+    // showDetail
+    $tableau = array();
+
+    // Obtenir les équipes dans la BD
+	$taches = showDetail($_GET['id']);
+
+	// Boucler sur les taches obtenus
+	while ($tache = mysqli_fetch_assoc($taches)) {
+	   $tableau[] = $tache;
+    }
+
+    header('Content-type: application/json; charset=utf-8');
+	echo json_encode($tableau, true);
+
+    // case switch pour les methodes post
     switch ($action) {
         
         case 'getAllTaches':
@@ -44,6 +59,7 @@
                 echo 'Erreur query string';
             }
             break;
+
     }
 
 
