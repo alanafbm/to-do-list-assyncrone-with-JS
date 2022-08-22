@@ -1,13 +1,13 @@
-import Task from "./Task.js";
-export default class Form  {
+import Detail from "./Detail";
+export default class Form extends Detail {
     constructor(el) {
-        // super();
+        super();
         this._el = el;
         this._elInputTask = '';
         this._elInputDescription = '';
         this._elImportance = '';
         this._elTaskDetail = '';
-        this._elInputImportance = this._el.querySelectorAll('input[name="importance"]');
+        this._elInputImportance = document.querySelectorAll('input[name="importance"]');
         this._elToDoList = document.querySelector('[data-js-tasks]');
 
         this.init();
@@ -43,80 +43,15 @@ export default class Form  {
         btnsDetail.forEach(function (btn) {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
+
                 const id = e.target.parentNode.parentNode.getAttribute('data-js-task');
-                console.log(e.target.parentNode);
                 this.injectLocation('tache', id);
                 this.showDetails()
             }.bind(this))
         }.bind(this));
     }
 
-    showDetails() {
-        /**
-         * Comportement suite a l'evenement hashchange
-         */
-        window.addEventListener('hashchange', function () {
-
-            // this._elInputTask = this._el.task.value;
-            // this._elInputDescription = this._el.description.value;
-            // this._elImportance = this._el.importance.value;
-            console.log(this._elToDoList);
-
-            let id = this.getIdInHash('tache');
-            console.log(id);
-            let encodedId = encodeURIComponent(id);
-                        
-            fetch(`requetes/requetesAsync.php?id=${encodedId}`)
-                .then(function (response) {
-                    if (response.ok) return response.text();
-                    else throw new Error('La réponse n\'est pas OK');
-                })
-                .then(function (data) {
-                    console.log(data.length);
-                    let dt = data.split(':');
-                
-                    this.templateDetails(data)
-                   
-                }.bind(this))
-                .catch(function (error) {
-                    console.log(`Il y a eu un problème avec l'opération fetch: ${error.message}`);
-                })
-
-        }.bind(this))
-    }
-
-    injectLocation(slug, id) {
-        window.location = `#!/${slug}/${id}`;
-    }
-
-    getIdInHash(slug) {
-        let hash = window.location.hash,
-            hashInArray = hash.split(`#!/${slug}/`),
-            id = hashInArray[1];
-
-        return id;
-    }
-
-    templateDetails(data){
-
-        // console.log(JSON.parse(data)[0].description);
-        let { description, importance, tache } = JSON.parse(data)[0];
-        this._elTaskDetail = document.querySelector('[data-js-task-detail]');
-        // console.log(task);
-        // console.log(description);
-        // console.log(importance);
-        let desc = 'Aucune description disponible.';
-        if (description === '') description = desc;
-
-        let elDetailDom = `
-                    <div class="detail__info">
-                        <p><small>Tâche : </small>${tache}</p>
-                        <p><small>Description : </small>${description}</p>
-                        <p><small>Importance : </small>${importance}</p>
-                    </div>`;
-
-        this._elTaskDetail.innerHTML = elDetailDom;
-    }
+    
 
     /**
      * Delete tache assyncrone
@@ -124,7 +59,6 @@ export default class Form  {
      */
     deleteTache(div) {
         const id = div.getAttribute('data-js-task')
-        console.log(div);
         const encodedId = encodeURIComponent(id)
         const myInit = {
             method: 'post',
@@ -147,12 +81,6 @@ export default class Form  {
             });
     }
 
-
-    // handleEventListener(btns, fn){
-    //     btns.forEach(btn => {
-    //         btn.addEventListener('click', fn)
-    //     });
-    // }
 
     /**
      * Validation du formualaire
@@ -245,7 +173,7 @@ export default class Form  {
 
         this._elToDoList.insertAdjacentHTML('beforeend', newTaskDom);
 
-        new Task(this._elToDoList.lastElementChild);
+        // new Task(this._elToDoList.lastElementChild);
     }
 
  

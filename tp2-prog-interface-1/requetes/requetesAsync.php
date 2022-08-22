@@ -7,19 +7,53 @@
         $action = $_POST['action'];
     }
 
-    // showDetail
-    $tableau = array();
+    if (isset($_GET['id'])) {
+        // showDetail
+        $tableau = array();
 
-    // Obtenir les équipes dans la BD
-	$taches = showDetail($_GET['id']);
+        // Obtenir les taches dans la BD
+        $taches = showDetail($_GET['id']);
 
-	// Boucler sur les taches obtenus
-	while ($tache = mysqli_fetch_assoc($taches)) {
-	   $tableau[] = $tache;
+        // Boucler sur les taches obtenus
+        while ($tache = mysqli_fetch_assoc($taches)) {
+        $tableau[] = $tache;
+        }
+
+        header('Content-type: application/json; charset=utf-8');
+        echo json_encode($tableau, true);
     }
 
-    header('Content-type: application/json; charset=utf-8');
-	echo json_encode($tableau, true);
+    if (isset($_GET['ordre'])) {
+        if (isset($_GET['ordre']) === 'tache') {
+
+            // trier par ordre alfabetique
+            $tableau = array();
+
+            $ordreTaches = trierParOrdreAlfabetique();
+             // Boucler sur les taches obtenus
+            while ($tache = mysqli_fetch_assoc($ordreTaches)) {
+                $tableau[] = $tache;
+            }
+
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode($tableau, true);
+
+        }else{
+            // trier par ordre importance
+             $tableau = array();
+
+            $ordreTaches = trierParImportance();
+
+            // Boucler sur les taches obtenus
+            while ($tache = mysqli_fetch_assoc($ordreTaches)) {
+                $tableau[] = $tache;
+            }
+
+            header('Content-type: application/json; charset=utf-8');
+            echo json_encode($tableau, true);
+
+        }
+    }
 
     // case switch pour les methodes post
     switch ($action) {

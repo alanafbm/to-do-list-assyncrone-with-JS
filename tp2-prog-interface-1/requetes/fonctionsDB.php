@@ -60,7 +60,11 @@
 		return executeRequete("SELECT tache, description, importance FROM taches WHERE id = $id");
 	}
 
-	function trierPar($trierpar) {
-		return executeRequete("SELECT * FROM taches ORDER BY importance ASC");
+	function trierParImportance() {
+		return executeRequete("SELECT id, tache, importance FROM taches ORDER BY importance ASC");
+	}
+
+	function trierParOrdreAlfabetique() {
+		return executeRequete("SELECT id, tache, importance FROM taches ORDER BY tache ASC");
 	}
 ?>
