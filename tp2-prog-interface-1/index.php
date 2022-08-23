@@ -12,11 +12,6 @@
 	<link rel="stylesheet" type="text/css" href="./assets/styles/styles.css">
 
 	<!-- scripts -->
-	<!-- <script type="module" src="./assets/scripts/App.js"></script>
-	<script type="module" src="./assets/scripts/Detail.js"></script>
-	<script type="module" src="./assets/scripts/Task.js"></script>
-	<script type="module" src="./assets/scripts/Form.js"></script>
-	<script type="module" src="./assets/scripts/SortTasks.js"></script> -->
 	<script type="module" src="./assets/scripts/main.js" defer></script>
 </head>
 
@@ -103,6 +98,12 @@
                 <button data-js-sort="importance">Trier par importance</button>
             </div>
         </section>
+
+        <template class="detail__info" data-js-task-detail-template>
+            <p><small>Tâche : </small>{{tache}}</p>
+            <p><small>Description : </small>{{description}}</p>
+            <p><small>Importance : </small>{{importance}}</p>
+        </template>
 
         <section class="detail detail--ouvert" data-js-section-detail>
             <h3>Détail d'une tâche</h3>

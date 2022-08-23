@@ -1,3 +1,4 @@
+import Detail from './Detail.js'
 export default class Form  {
     constructor(el) {
         // super();
@@ -169,6 +170,7 @@ export default class Form  {
                 this._elToDoList.append(elTemplate);
 
                 this._el.reset();
+                new Detail();
                 this.getBtnsDeleteListener();
                 this.getBtnsDetailListener();
                 return
