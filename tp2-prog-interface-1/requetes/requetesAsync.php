@@ -24,8 +24,8 @@
     }
 
     if (isset($_GET['ordre'])) {
-        if (isset($_GET['ordre']) === 'tache') {
-
+     
+        if (isset($_GET['ordre']) == 'tache') {
             // trier par ordre alfabetique
             $tableau = array();
 
@@ -38,7 +38,7 @@
             header('Content-type: application/json; charset=utf-8');
             echo json_encode($tableau, true);
 
-        }else{
+        }else {
             // trier par ordre importance
              $tableau = array();
 

@@ -15,8 +15,9 @@ export default class Detail {
      * Initialise les comportements
      */
     init() {
-        this._elBtnShowDetail.addEventListener('click', this.showDetails.bind(this));
         this._elChevron.addEventListener('click', this.showHideDetail.bind(this));
+        this._elBtnShowDetail.addEventListener('click', this.showDetails.bind(this));
+        window.addEventListener('hashchange', this.showDetails.bind(this));
     }
 
     
@@ -34,36 +35,31 @@ export default class Detail {
     } 
 
     showDetails() {
-        /**
-         * Comportement suite a l'evenement hashchange
-         */
-        window.addEventListener('hashchange', function () {
 
-            let id = this.getIdInHash('tache');
-            let encodedId = encodeURIComponent(id);
-                        
-            fetch(`requetes/requetesAsync.php?id=${encodedId}`)
-                .then(function (response) {
-                    if (response.ok) return response.text();
-                    else throw new Error('La réponse n\'est pas OK');
-                })
-                .then(function (data) {
-                    if (data.length > 0){
-                        this.templateDetails(data)
-                    }else{
-                        this._elTaskDetail.innerHTML = '';
+        let id = this.getIdInHash('tache');
+        let encodedId = encodeURIComponent(id);
+                    
+        fetch(`requetes/requetesAsync.php?id=${encodedId}`)
+            .then(function (response) {
+                if (response.ok) return response.text();
+                else throw new Error('La réponse n\'est pas OK');
+            })
+            .then(function (data) {
+                if (data.length > 0){
+                    this.templateDetails(data)
+                }else{
+                    this._elTaskDetail.innerHTML = '';
 
-                        let domain = location.pathname;
-                        history.replaceState('Accueil', null, domain)
-                    //replaceState vers l'accueil
-                    }
-                   
-                }.bind(this))
-                .catch(function (error) {
-                    console.log(`Il y a eu un problème avec l'opération fetch: ${error.message}`);
-                })
+                    let domain = location.pathname;
+                    history.replaceState('Accueil', null, domain)
+                //replaceState vers l'accueil
+                }
+                
+            }.bind(this))
+            .catch(function (error) {
+                console.log(`Il y a eu un problème avec l'opération fetch: ${error.message}`);
+            })
 
-        }.bind(this))
     }
 
     injectLocation(slug, id) {

@@ -51,7 +51,7 @@ export default class Form extends Detail {
         }.bind(this));
     }
 
-    
+
 
     /**
      * Delete tache assyncrone
@@ -92,6 +92,7 @@ export default class Form extends Detail {
         this._elImportance = this._el.importance.value;
 
         let estValide = true;
+
         /* Input 'Nouvelle tâche' */
         if (this._el.task.value === '') {
             this._el.task.parentNode.classList.add('error');
@@ -135,15 +136,30 @@ export default class Form extends Detail {
 
         fetch('requetes/requetesAsync.php', myInit)
             .then(function (response) {
-                if (response.ok) return response.text();
+                if (response.ok) return response.json();
                 else throw new Error('La réponse n\'est pas OK');
             })
             .then(function (data) {
-                let id = data,
-                    tache = encodedTask,
-                    importance = encodedImportance;
-                this.createTask(id, tache, importance);
+                let infos = {
+                    id: data,
+                    tache: encodedTask,
+                    importance: encodedImportance
+                }
+              
+                let elTaskTemplate = document.querySelector('[data-js-task-template]');
+                    let elCloneTemplate = elTaskTemplate.cloneNode(true);
+
+                    for (const key in infos) {
+                        let regExp = new RegExp('{{' + key + '}}', 'g');
+                        elCloneTemplate.innerHTML = elCloneTemplate.innerHTML.replace(regExp, infos[key]);
+                    }
+
+                let elTemplate = document.importNode(elCloneTemplate.content, true);
+                this._elToDoList.append(elTemplate);
+                this.showDetails();
                 this._el.reset();
+                
+                
             }.bind(this))
             .catch(function (error) {
                 console.log(`Il y a eu un problème avec l'opération fetch: ${error.message}`);
@@ -173,8 +189,7 @@ export default class Form extends Detail {
 
         this._elToDoList.insertAdjacentHTML('beforeend', newTaskDom);
 
-        // new Task(this._elToDoList.lastElementChild);
     }
 
- 
+
 }

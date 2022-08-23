@@ -56,6 +56,19 @@
             </form>
         </section>
 
+        <template data-js-task-template="{{id}}">
+            <p>
+                <span>
+                    <small>Tâche : </small>{{tache}}
+                </span>
+                <span>
+                    <small>Importance : </small>{{importance}}
+                </span>
+                <button data-js-show-detail>Afficher le détail</button>
+                <button data-js-delete>Supprimer</button>
+            </p>
+        </template> 
+
         <section class="to-do-list">
             <h3>Liste des tâches</h3>
 

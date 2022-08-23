@@ -37,7 +37,7 @@ label {
 }
 
 p {
-    margin: 0;
+    margin: 20px;
 }
 
 p + p {
@@ -64,7 +64,9 @@ a:hover {
 hr {
     margin-top: 50px;
 }
-
+template{
+    margin-top: 10px;
+}
 /* Form*/
 
 input[type=text] {
