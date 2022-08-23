@@ -62,10 +62,6 @@ export default class Detail {
 
     }
 
-    injectLocation(slug, id) {
-        window.location = `#!/${slug}/${id}`;
-    }
-
     getIdInHash(slug) {
         let hash = window.location.hash,
             hashInArray = hash.split(`#!/${slug}/`),

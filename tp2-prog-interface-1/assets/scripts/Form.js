@@ -1,7 +1,6 @@
-import Detail from "./Detail";
-export default class Form extends Detail {
+export default class Form  {
     constructor(el) {
-        super();
+        // super();
         this._el = el;
         this._elInputTask = '';
         this._elInputDescription = '';
@@ -12,7 +11,6 @@ export default class Form extends Detail {
 
         this.init();
     }
-
 
     /**
      * Initialise les comportements
@@ -25,11 +23,18 @@ export default class Form extends Detail {
             let estValide = this.validForm();
             if (estValide) {
                 this.afficheTache();
-
-
             }
         }.bind(this));
 
+        this.getBtnsDeleteListener();
+
+        this.getBtnsDetailListener();
+    }
+
+    /**
+     * Comportements button listener delete
+     */
+    getBtnsDeleteListener() {
         const btnsDelete = this._elToDoList.querySelectorAll('[data-js-delete]');
         btnsDelete.forEach(function (btn) {
             btn.addEventListener('click', function (e) {
@@ -38,7 +43,12 @@ export default class Form extends Detail {
                 this.deleteTache(div);
             }.bind(this))
         }.bind(this));
+    }
 
+    /**
+     * Comportements button listener details
+     */
+    getBtnsDetailListener() {
         const btnsDetail = this._elToDoList.querySelectorAll('[data-js-show-detail]');
         btnsDetail.forEach(function (btn) {
             btn.addEventListener('click', function (e) {
@@ -46,14 +56,10 @@ export default class Form extends Detail {
 
                 const id = e.target.parentNode.parentNode.getAttribute('data-js-task');
                 this.injectLocation('tache', id);
-                this.showDetails()
             }.bind(this))
         }.bind(this));
     }
-
-
-
-    /**
+  /**
      * Delete tache assyncrone
      * @param {*} div 
      */
@@ -81,6 +87,9 @@ export default class Form extends Detail {
             });
     }
 
+    injectLocation(slug, id) {
+        window.location = `#!/${slug}/${id}`;
+    }
 
     /**
      * Validation du formualaire
@@ -122,9 +131,11 @@ export default class Form extends Detail {
         this._elInputTask = this._el.task.value;
         this._elInputDescription = this._el.description.value;
         this._elImportance = this._el.importance.value;
+
         let encodedTask = encodeURIComponent(this._elInputTask),
             encodedDescription = encodeURIComponent(this._elInputDescription),
             encodedImportance = encodeURIComponent(this._elImportance)
+
         let myInit = {
             method: 'post',
             headers: {
@@ -145,51 +156,30 @@ export default class Form extends Detail {
                     tache: encodedTask,
                     importance: encodedImportance
                 }
-              
-                let elTaskTemplate = document.querySelector('[data-js-task-template]');
-                    let elCloneTemplate = elTaskTemplate.cloneNode(true);
 
-                    for (const key in infos) {
-                        let regExp = new RegExp('{{' + key + '}}', 'g');
-                        elCloneTemplate.innerHTML = elCloneTemplate.innerHTML.replace(regExp, infos[key]);
-                    }
+                let elTaskTemplate = document.querySelector('[data-js-task-template]');
+                let elCloneTemplate = elTaskTemplate.cloneNode(true);
+
+                for (const key in infos) {
+                    let regExp = new RegExp('{{' + key + '}}', 'g');
+                    elCloneTemplate.innerHTML = elCloneTemplate.innerHTML.replace(regExp, infos[key]);
+                }
 
                 let elTemplate = document.importNode(elCloneTemplate.content, true);
                 this._elToDoList.append(elTemplate);
-                this.showDetails();
+
                 this._el.reset();
-                
-                
+                this.getBtnsDeleteListener();
+                this.getBtnsDetailListener();
+                return
+
+
             }.bind(this))
             .catch(function (error) {
                 console.log(`Il y a eu un problème avec l'opération fetch: ${error.message}`);
             });
     };
 
-    /**
-     * Construit, injecte et lance les comportements de chaque nouvelle tâche
-     * @param {int} index 
-     */
-    createTask(id, tache, importance) {
-
-        let newTaskDom = `
-                        <div data-js-task=${id}>
-                            <p>
-                                <span>
-                                    <small>Tâche : </small>${tache}
-                                </span>
-                                -
-                                <span>
-                                    <small>Importance : </small>${importance}
-                                </span>
-                                <button data-js-show-detail>Afficher le détail</button>
-                                <button data-js-delete>Supprimer</button>
-                            </p>
-                        </div> `;
-
-        this._elToDoList.insertAdjacentHTML('beforeend', newTaskDom);
-
-    }
 
 
 }

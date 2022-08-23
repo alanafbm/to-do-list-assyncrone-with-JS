@@ -1,7 +1,5 @@
- import Form from "./Form.js";
-export default class SortTasks extends Form  {
+export default class SortTasks {
     constructor(el) {
-        super();
         this._el = el;
         this._elToDoList = document.querySelector('[data-js-tasks]');
 
@@ -20,8 +18,6 @@ export default class SortTasks extends Form  {
                 this.sort(ordre);
             }.bind(this));
         }
-
-        
     }
 
     /**
@@ -56,6 +52,32 @@ export default class SortTasks extends Form  {
 
      
     }
+
+    /**
+     * Construit, injecte et lance les comportements de chaque nouvelle tâche
+     * @param {int} index 
+     */
+    createTask(id, tache, importance) {
+
+        let newTaskDom = `
+                        <div data-js-task=${id}>
+                            <p>
+                                <span>
+                                    <small>Tâche : </small>${tache}
+                                </span>
+                                -
+                                <span>
+                                    <small>Importance : </small>${importance}
+                                </span>
+                                <button data-js-show-detail>Afficher le détail</button>
+                                <button data-js-delete>Supprimer</button>
+                            </p>
+                        </div> `;
+
+        this._elToDoList.insertAdjacentHTML('beforeend', newTaskDom);
+
+    }
+
 
    
 }
